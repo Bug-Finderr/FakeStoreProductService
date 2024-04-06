@@ -1,5 +1,6 @@
 package com.bugfi.productservice.controllers;
 
+import com.bugfi.productservice.exceptions.ProductNotFoundException;
 import com.bugfi.productservice.models.Product;
 import com.bugfi.productservice.services.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
+    public Product getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         return productService.getProductById(id);
     }
 

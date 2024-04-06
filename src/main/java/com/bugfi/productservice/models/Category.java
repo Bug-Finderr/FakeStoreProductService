@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
-    private Long id;
-    private String title;
-    private Double price;
-    private Category category;
-    private String description;
-    private String image;
+public class Category {
+    private String name;
+    private Long itemCount = 0L;
+
+    public void incrementItemCount() {
+        this.itemCount++;
+    }
 }
