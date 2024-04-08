@@ -62,7 +62,7 @@ public class FakeStoreProductService implements ProductService{
     public Category findOrMakeCategory(String categoryName) {
         Category category = categories.get(categoryName);
         if (category == null) {
-            category = new Category(categoryName, 0L);
+            category = new Category((long) (categories.size() + 1), categoryName, 0L);
             categories.put(categoryName, category);
         }
         category.incrementItemCount();

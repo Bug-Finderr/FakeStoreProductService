@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "6900:5432"
+    environment:
+      POSTGRES_USER: bugfinderr
+      POSTGRES_PASSWORD: bugfi
+      POSTGRES_DB: fakestore
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
