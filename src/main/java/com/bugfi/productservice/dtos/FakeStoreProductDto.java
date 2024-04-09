@@ -1,5 +1,6 @@
 package com.bugfi.productservice.dtos;
 
+import com.bugfi.productservice.models.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ public class FakeStoreProductDto {
     private Long id;
     private String title;
     private Double price;
-    private String category;
+    private Category category;
     private String description;
     private String image;
 }

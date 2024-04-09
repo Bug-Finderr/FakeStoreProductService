@@ -7,4 +7,6 @@ public interface ProductService {
     Product getProductById(Long id) throws ProductNotFoundException;
 
     Iterable<Product> getAllProducts();
+
+    Product addProduct(Product product);
 }

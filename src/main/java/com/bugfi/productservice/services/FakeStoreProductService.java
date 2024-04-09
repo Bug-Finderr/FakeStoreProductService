@@ -12,16 +12,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
+    private final String url = "https://fakestoreapi.com/products";
     private Map<String, Category> categories = new HashMap<>();
+    private final RestTemplate restTemplate = new RestTemplate();
 
 
     @Override
     public Product getProductById(Long id) throws ProductNotFoundException {
         // Call Fake Store Product API to get the product by given id
-        RestTemplate restTemplate = new RestTemplate();
-        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
+        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject(url + "/" + id, FakeStoreProductDto.class);
 
         // Convert FakeStoreProductDto obj to Product obj
         if (fakeStoreProductDto == null) throw new ProductNotFoundException("Product Not Found", id);
@@ -32,8 +33,7 @@ public class FakeStoreProductService implements ProductService{
     @Override
     public Iterable<Product> getAllProducts() {
         // Call Fake Store Product API to get all products
-        RestTemplate restTemplate = new RestTemplate();
-        FakeStoreProductDto[] fakeStoreProductDtos = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreProductDto[].class);
+        FakeStoreProductDto[] fakeStoreProductDtos = restTemplate.getForObject(url, FakeStoreProductDto[].class);
 
         // Convert FakeStoreProductDto[] obj to List<Product> obj
         if (fakeStoreProductDtos == null) return List.of();
@@ -45,27 +45,25 @@ public class FakeStoreProductService implements ProductService{
         return products;
     }
 
+    @Override
+    public Product addProduct(Product product) {
+        // Add product to Fake Store Product API
+        FakeStoreProductDto fakeStoreProductDto = restTemplate.postForObject(url, product, FakeStoreProductDto.class);
+
+        // Convert FakeStoreProductDto obj to Product obj
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+    }
+
 
     private Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {
         Product product = new Product();
         product.setId(fakeStoreProductDto.getId());
         product.setTitle(fakeStoreProductDto.getTitle());
         product.setPrice(fakeStoreProductDto.getPrice());
-        Category category = findOrMakeCategory(fakeStoreProductDto.getCategory());
+        Category category = new Category(fakeStoreProductDto.getCategory().getId(), fakeStoreProductDto.getCategory().getName());
         product.setCategory(category);
         product.setDescription(fakeStoreProductDto.getDescription());
         product.setImage(fakeStoreProductDto.getImage());
         return product;
-    }
-
-
-    public Category findOrMakeCategory(String categoryName) {
-        Category category = categories.get(categoryName);
-        if (category == null) {
-            category = new Category((long) (categories.size() + 1), categoryName, 0L);
-            categories.put(categoryName, category);
-        }
-        category.incrementItemCount();
-        return category;
     }
 }
