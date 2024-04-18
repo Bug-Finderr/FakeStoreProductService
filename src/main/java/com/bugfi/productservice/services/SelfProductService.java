@@ -5,10 +5,12 @@ import com.bugfi.productservice.models.Category;
 import com.bugfi.productservice.models.Product;
 import com.bugfi.productservice.repositories.CategoryRepository;
 import com.bugfi.productservice.repositories.ProductRepository;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Primary
 @Service("selfProductService")
 public class SelfProductService implements ProductService{
     private final ProductRepository productRepository;
